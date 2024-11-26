@@ -1,0 +1,75 @@
+<html>
+<head>
+<style>
+body {font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5;}
+@page {size: A4; /* or use 'letter' or any desired size */
+margin: 1rem; /* Set margins to zero */
+}
+h1 {color: #2E4053;}
+h2 {color: #1F618D; border-bottom: 2px solid #1F618D; padding-bottom: 10px;}
+h3 {color: #2874A6;}
+.section {margin-bottom: 40px;}
+.timeline {border-left: 3px solid #1F618D; padding-left: 20px; margin-top: 20px;}
+.timeline-event {position: relative; margin-bottom: 20px;}
+.timeline-event::before {content: ''; position: absolute; left: -31px; top: 0; width: 20px; height: 20px; background-color: #1F618D; border-radius: 50%;}
+ul {list-style-type: square; color: #2E4053;}
+</style>
+</head>
+<body>
+
+<h1>{{ title }}</h1>
+
+<div class="section">
+<h2>Key Points</h2>
+<ul>
+    {% for point in key_points %}
+    <li><strong>{{ point.point }}</strong> {{ point.explanation }}</li>
+    {% endfor %}
+</ul>
+</div>
+
+<div class="section">
+<h2>Important Stakeholders</h2>
+{% for country in important_stakeholders_per_country %}
+    <h3>{{country}}</h3>
+    {% for stakeholder in important_stakeholders_per_country[country] %}
+        <p><strong>{{ stakeholder.name }}</strong> {{ stakeholder.explanation }}</p>
+    {% endfor %}
+{% endfor %}
+</div>
+
+<div class="section">
+    <h2>Arguments and Counterarguments</h2>
+
+    <h3>{{ arguments_for.title }}</h3>
+    <ul>
+        {% for argument in arguments_for['items'] %}
+        <li>{{ argument }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>{{ arguments_against.title }}</h3>
+    <ul>
+        {% for counterargument in arguments_against['items'] %}
+        <li>{{ counterargument }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="section">
+<h2>Time Analysis</h2>
+<p>{{ time_analysis }}</p>
+
+<div class="timeline">
+{% for event in timeline %}
+    <div class="timeline-event">
+        <h4>{{ event.date }}</h4>
+        <p><em><strong>{{event.person}}</strong> {{ event.event }} </em></p>
+    </div>
+{% endfor %}
+</div>
+
+</div>
+
+</body>
+</html>

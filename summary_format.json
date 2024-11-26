@@ -1,0 +1,129 @@
+{
+    "type": "json_schema",
+    "json_schema": {
+        "name": "summary",
+        "strict": true,
+        "schema": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "Title to be used at the top of the summary"
+                },
+                "key_points": {
+                    "type": "array",
+                    "description": "List of key points with their titles and explanations",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "point": {
+                                "type": "string",
+                                "description": "The title for the key point"
+                            },
+                            "explanation": {
+                                "type": "string",
+                                "description": "The explanation for the key point"
+                            }
+                        },
+                        "required": ["point", "explanation"],
+                        "additionalProperties": false
+                    }
+                },
+                "important_stakeholders_per_country": {
+                    "type": "object",
+                    "description": "Mapping of countries to their stakeholders",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name of the stakeholder"
+                                },
+                                "explanation": {
+                                    "type": "string",
+                                    "description": "Details about stakeholder. who this stakeholder is, why they are important, what their stance is."
+                                }
+                            },
+                            "required": ["name", "explanation"],
+                            "additionalProperties": false
+                        }
+                    }
+                },
+                "arguments_for": {
+                    "type": "object",
+                    "description": "List of arguments supporting the topic",
+                    "properties": {
+                        "title": {
+                            "type": "string",
+                            "description": "Title for the arguments supporting the topic"
+                        },
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "required": ["title", "items"],
+                    "additionalProperties": false
+                },
+                "arguments_against": {
+                    "type": "object",
+                    "description": "List of arguments against the topic",
+                    "properties": {
+                        "title": {
+                            "type": "string",
+                            "description": "Title for the arguments against the topic"
+                        },
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "required": ["title", "items"],
+                    "additionalProperties": false
+                },
+                "time_analysis": {
+                    "type": "string",
+                    "description": "A brief summary of the timeline analysis"
+                },
+                "timeline": {
+                    "type": "array",
+                    "description": "Chronological list of events in the timeline",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "date": {
+                                "type": "string",
+                                "description": "Date of the event in YYYY-MM-DD format"
+                            },
+                            "person": {
+                                "type": "string",
+                                "description": "Person associated with the event"
+                            },
+                            "event": {
+                                "type": "string",
+                                "description": "Details about the event"
+                            }
+                        },
+                        "required": ["date", "person", "event"],
+                        "additionalProperties": false
+                    }
+                }
+            },
+            "required": [
+                "title",
+                "key_points",
+                "arguments_for",
+                "arguments_against",
+                "time_analysis",
+                "timeline"
+            ],
+            "additionalProperties": false
+        }
+    }
+}

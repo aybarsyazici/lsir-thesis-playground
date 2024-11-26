@@ -1,0 +1,119 @@
+version: "v0.2.0"
+prompts:
+  delimiter: "####"
+  zero_shot: |
+    You are assisting dialogue activities to support a peaceful conflict settlement.
+    You will be provided with an event topic and an article about conflicts in different regions, delimited by four hashtags,
+    i.e. ####. Your task is to help resolve disagreements over domain-specific issues by identifying the specific issues at hand and examine stakeholders'
+    positions on this topic based on the information provided. To complete this task, perform the following steps:
+
+    Step 0: Check whether the article is about the given event topic. If it is not, state "False" in the "is_about_event" field.
+    If it is, state "True". If the article is not about the event topic, skip the rest of the steps.
+    Step 1: Identify the main political issue that the article describes. 
+    Such issues may include the type of state system, power sharing and governance arrangements, transitions to democracy,
+    minority rights, wealth-sharing, and resource distribution, to mention just a few. 
+    They form the content of what the conflict is about. 
+    Step 2: Identify the main stakeholders mentioned in the article.
+    These are the individuals, groups, organisations or parties involved or affected by the conflict.
+    They can include, but are not limited to, government officials, military generals, religious leaders,
+    civil society actors, business community members, and indigenous groups. Make sure to use English spelling, and write the full name of the stakeholder in lowercase.
+    First name + surname (without titles) if it is a person, or the full name of the organisation/country/group always in lowercase and always in English.
+    Step 3: For each identified stakeholder, determine:
+      - Position: Extract the position held by the identified stakeholder, defined as the stated demand regarding the main political issue described by the article. Always written in English.
+      - Stance: Position taken with respect to the main political issue of the article, which can be "Pro", "Con", or "Neutral".
+      - Sentiment: Determine the emotional tone or polarity of the position which can be "Positive", "Negative", or "Neutral".
+      - Emotion: The emotion conveyed by the position. This can be: "Anger", "Fear", "Joy", "Sadness", "Disgust" or "Surprise".
+      - Country: The geographic location of the stakeholder. Containing the full name of the country in lowercase in English and the ISO 3166-1 alpha-3 code. If the stakeholder is an individual, write the country where they are based. If the stakeholder is an organisation, write the country where the organisation is based. If the stakeholder is a country, write the name of the country. 
+      - Target: List of tuples, similar to RDF triples, that represent the target of the stakeholder's position. Each tuple should contain:
+        a. the predicate, i.e. the action or relationship that the stakeholder's position is directed towards. This can be a verb, noun, or adjective. Must be in English.
+        b. the entity that the stakeholder's position is directed towards. This can be a person, group, organisation, or country. First name + surname if it is a person, or the full name of the organisation/country/group always in lowercase.
+        c. enum string that dictates whether the predicate shows a positive, negative, or neutral relationship with the target. The possible values are "Positive", "Negative", or "Neutral".
+    Step 4: Determine if context is provided for the political issue that the article describes. Context information may be geographic, i.e., if it mentions specific locations or regions relevant to the conflict such as Ukraine, Israel, or Palestine, social, political, or economic. If no contextual information is given, you should state "Not provided".
+    Step 5: Determine if each position is supported by additional claims, such as arguments, evidence, anecdotes, or beliefs. If so, specify the type of support provided (e.g., argument, opinions, statistics, etc) and summarise its content. If the position lacks any supporting evidence, state "Not provided".
+    Step 6: 
+    Once you have extracted the stakeholders and analyzed their positions, present your results as a JSON in English with the following format:
+    {
+      "report": {
+        "political_issue": <main political issue of the article>,
+        "positions": [
+          {
+            "stakeholder": <entity who expressed its position written in English>,
+            "position": <position content>,
+            "stance": <"Pro", "Con", or "Neutral">,
+            "sentiment": <"Positive", "Negative", or "Neutral">,
+            "emotion": <"Anger", "Fear", "Joy", "Sadness", "Disgust" or "Surprise">,
+            "context": <"Geographic", "Social", "Political", "Economic", or "Not provided">,
+            "support": {
+              "type": <type of evidence>,
+              "content": <evidence used to support this position>
+            },
+            country: {
+              "name": <full name of the country in lowercase in English>,
+              "code": <ISO 3166-1 alpha-3 code>
+            },
+            "targets": [(predicate, target, stance_type)...]
+          },
+          ...
+        ],
+        "is_about_event": <"True" or "False">
+      }
+    }
+
+    Important reminders:
+    * Ensure the information you provide is strictly based on the news article's content.
+    * Choose from the specified possible values for stance, sentiment, and emotion. Do not create new values for these fields.
+    * Output each value of JSON field in English, regardless of the article's original language. If you cannot understand the language, return an empty JSON.
+  depopulate: |
+    You are tasked with clustering names that refer to the same individual. Names are given as a numbered list, and you will return the clusters as a list of lists of **indexes**.
+
+    **Guidelines:**
+    1. Group names with high similarity (e.g., "John Smith" and "J. Smith").
+    2. Do not group unrelated names (e.g., "Hanna Fedorenko" and "France").
+    3. Use only the indexes of the input list.
+    4. Names with no variations should appear as single-item lists.
+
+    **Steps to Perform:**
+    1. Compare names for similarities, focusing on matching parts like full names, initials, or titles.
+    2. Exclude unrelated entities such as locations, organizations, or ambiguous abbreviations.
+    3. Output clusters with each name's index in the correct range. While outputting, use the index provided to you in front of the name in the input.
+
+    **Example Input and Output:**
+    Input:
+    0. John Smith  
+    1. J. Smith  
+    2. Johnny Smith  
+    3. France  
+    4. Dr. John Smith
+    5. putin
+    6. Vladimir Putin
+    7. Recep Tayyip Erdogan
+    8. Russian President
+    9. President of Russia
+    10. President of Turkey
+
+    Output:
+    [
+      [0, 1, 2, 4],  # Variations of "John Smith"
+      [3],           # "France"
+      [5, 6, 8, 9],   # Variations of "Vladimir Putin" and "President of Russia"
+      [7, 10]        # "Recep Tayyip Erdogan" and "President of Turkey"
+    ]
+  link_along_events:
+    event_1:
+      name: "Russian Annexation of Donetsk, Kherson, Luhansk and Zaporizhzhia Oblasts"
+      description: "On 30 September 2022, Russia unilaterally declared its annexation of four Ukrainian oblasts—Donetsk, Kherson, Luhansk and Zaporizhzhya. None of the oblasts were fully under Russian control at the time of the declaration. The annexation occurred after referendums held days prior, organized by Russian occupation authorities in territories. The results were rejected by large parts of the international community."
+      topic: "Status of occupied territories"
+      search_period: "01.09.2022-31.10.2022"
+    event_2:
+      name: "Elections in Russia-Occupied Ukraine"
+      description: "On 8–10 September 2023, elections were held in the parts of Ukraine occupied by Russian forces. The process and the results were largely rejected by the international community and sparked renewed debates about the status of the occupied territories."
+      topic: "Elections in occupied territories"
+      search_period: "01.08.2023-30.09.2023"
+    event_3:
+      name: "Recognition of Palestinian State by Norway, Ireland and Spain"
+      description: "Following Hamas’ attacks in Israel on 7 October 2023, Israel launched a large-scale military campaign in Gaza with the objective of annihilating Hamas. This has re-ignited discussions about the “two-state solution” and with that, about the status of Gaza, i.e. whether it should be governed as part of a unified and independent Palestinian state, or whether it should remain a separate entity. Notably, Israel’s government has not advanced a plan for the post-war governance of Gaza. The discussions have become more pronounced in the context of the recognition of Palestinian statehood by Norway, Ireland and Spain in May 2024."
+      topic: "Status of occupied territories"
+      search_period: "01.03.2024-30.05.2024"
+playground_models: ["gpt-4o-mini"]
+offline_models: ["gpt-4o-mini"]
+embedding_models: ["all-mpnet-base-v2", "all-MiniLM-L6-v2", "all-MiniLM-L12-v2", "all-distilroberta-v1"]

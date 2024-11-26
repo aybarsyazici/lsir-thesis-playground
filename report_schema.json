@@ -1,0 +1,158 @@
+{
+    "type": "json_schema",
+    "json_schema": {
+        "name": "report",
+        "strict": true,
+        "schema": {
+            "type": "object",
+            "properties": {
+                "political_issue": {
+                    "type": "string",
+                    "description": "The main political issue discussed in the article."
+                },
+                "positions": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "stakeholder": {
+                                "type": "string",
+                                "description": "The stakeholder in English. First name + surname (without titles) if it is a person, or the full name of the organisation/country/group always in lowercase and English"
+                            },
+                            "position": {
+                                "type": "string",
+                                "description": "The position or statement made by the stakeholder. Written in English."
+                            },
+                            "stance": {
+                                "type": "string",
+                                "enum": [
+                                    "Pro",
+                                    "Con",
+                                    "Neutral"
+                                ],
+                                "description": "The stance of the stakeholder towards the issue."
+                            },
+                            "sentiment": {
+                                "type": "string",
+                                "enum": [
+                                    "Positive",
+                                    "Negative",
+                                    "Neutral"
+                                ],
+                                "description": "The sentiment expressed by the stakeholder."
+                            },
+                            "emotion": {
+                                "type": "string",
+                                "description": "The primary emotion expressed by the stakeholder."
+                            },
+                            "context": {
+                                "type": "string",
+                                "enum": [
+                                    "Geographic",
+                                    "Social",
+                                    "Political",
+                                    "Economic",
+                                    "Not provided"
+                                ],
+                                "description": "Context for the political issue that the article describes."
+                            },
+                            "support": {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "type": "string",
+                                        "description": "The type of support backing the stakeholder's position (e.g., Argument, Statistics, Not provided)."
+                                    },
+                                    "content": {
+                                        "type": "string",
+                                        "description": "The content of the support provided, if any."
+                                    }
+                                },
+                                "required": [
+                                    "type",
+                                    "content"
+                                ],
+                                "description": "The support or evidence provided by the stakeholder for their position.",
+                                "additionalProperties": false
+                            },
+                            "targets": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "predicate": {
+                                            "type": "string",
+                                            "description": "The relationship between the stakeholder and the target."
+                                        },
+                                        "target": {
+                                            "type": "string",
+                                            "description": "The name or role of stakeholder or group targeted by this predicate."
+                                        },
+                                        "stance_type": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Positive",
+                                                "Negative",
+                                                "Neutral"
+                                            ],
+                                            "description": "Whether the predicate of the stakeholder shows a positive, negative, or neutral stance towards the target."
+                                        }
+                                    },
+                                    "required": [
+                                        "predicate",
+                                        "target",
+                                        "stance_type"
+                                    ],
+                                    "description": "Object holding one predicate and target of the stakeholder's position.",
+                                    "additionalProperties": false
+                                },
+                                "description": "The stakeholders or groups targeted by the stakeholder's position."
+                            },
+                            "country": {
+                                "type": "object",
+                                "description": "The geographic location of the stakeholder. If the stakeholder is an individual, write the country where they are based. If the stakeholder is an organisation, write the country where the organisation is based. If the stakeholder is a country, write the name of the country. Write the full name of the country in lowercase in English.",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "The name of the country, written in English full lowercase. Set to 'None' if the country is unknown."
+                                    },
+                                    "code": {
+                                        "type": "string",
+                                        "description": "The ISO 3166-1 alpha-3 code of the country. Set to 'None' if the country is unknown."
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "code"
+                                ],
+                                "additionalProperties": false
+                            }
+                        },
+                        "required": [
+                            "stakeholder",
+                            "position",
+                            "stance",
+                            "sentiment",
+                            "emotion",
+                            "context",
+                            "support",
+                            "targets",
+                            "country"
+                        ],
+                        "additionalProperties": false
+                    }
+                },
+                "is_about_event": {
+                    "type": "boolean",
+                    "description": "Whether the article is about politics or recent world events. Set to false if the article is about something non-political."
+                }
+            },
+            "required": [
+                "political_issue",
+                "positions",
+                "is_about_event"
+            ],
+            "additionalProperties": false
+        }
+    }
+}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Catppuccin Colorscheme */
+        @page {
+            size: A4; /* or use 'letter' or any desired size */
+            margin: 0; /* Set margins to zero */
+        }
+        body {
+            background-color: #1E1E2E;
+            color: #D9E0EE;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .section {
+            padding: 20px;
+            margin: 20px;
+            background-color: #302D41;
+            border-radius: 8px;
+        }
+        h1, h2, h3 {
+            color: #F5C2E7;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        h2 {
+            font-size: 1.5em;
+        }
+        a {
+            color: #96CDFB;
+        }
+        .timeline {
+            margin: 20px;
+        }
+        .timeline-event {
+            margin-bottom: 15px;
+        }
+        .timeline-date {
+            color: #ABE9B3;
+            font-weight: bold;
+        }
+        .timeline-content {
+            margin-left: 20px;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 40px;
+        }
+    </style>
+    <title>{{ title }}</title>
+</head>
+<body>
+    <div class="section">
+        <h1>{{ title }}</h1>
+    </div>
+
+    <div class="section">
+        <h2>Key Points</h2>
+        {% for point in key_points %}
+            <p><strong>{{ point.point }}</strong> {{ point.explanation }}</p>
+        {% endfor %}
+    </div>
+
+    <div class="section">
+        <h2>Important Stakeholders</h2>
+        {% for stakeholder in important_stakeholders %}
+            <p><strong>{{ stakeholder.name }}</strong> {{ stakeholder.explanation }}</p>
+        {% endfor %}
+    </div>
+
+    <div class="section">
+        <h2>Arguments and Counterarguments</h2>
+        <p><strong>Arguments Against the Elections:</strong></p>
+        <ul>
+            {% for argument in arguments_against %}
+                <li>{{ argument }}</li>
+            {% endfor %}
+        </ul>
+        <p><strong>Counterarguments:</strong></p>
+        <ul>
+            {% for counterargument in counterarguments %}
+                <li>{{ counterargument }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Time Analysis</h2>
+        <p>{{ time_analysis }}</p>
+        <div class="timeline">
+            <h3>Timeline of Events</h3>
+            {% for event in timeline %}
+                <div class="timeline-event">
+                    <div class="timeline-date">{{ event.date }}</div>
+                    <div class="timeline-content">
+                        <p><strong>{{ event.person }}</strong> {{ event.event }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

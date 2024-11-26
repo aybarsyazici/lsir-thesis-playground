@@ -1,0 +1,68 @@
+[tool.poetry]
+name = "new-prompts"
+version = "0.1.0"
+description = ""
+authors = ["aybarsyazici <aybarsyazici@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.9.20"
+jsonargparse = "*"
+polars = "*"
+openai = "*"
+python-dotenv = "*"
+plotly = "*"
+python-dateutil = "*"
+transformers = { version = "4.43.4", extras = ["sentencepiece"] }
+accelerate = "*"
+sentence-transformers = "*"
+bertopic = { version = "*", extras = ["spacy"] }
+tiktoken = "*"
+numpy = "*"
+rapidfuzz = "^3.10.0"
+pycountry = "^24.6.1"
+datasets = "*"
+einops = "*"
+weasyprint = "^63.0"
+
+[tool.poetry.group.dev.dependencies]
+coverage = {extras = ["toml"], version = "*"}
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+black = "^24.10.0"
+ruff = "^0.6.9"
+pyyaml = "*"
+pandas = "*"
+
+[tool.poetry.group.cuda.dependencies]
+dask-cuda = "23.12.*"
+cudf-cu12 = { version = "23.12.*", source = "nvidia" }
+dask-cudf-cu12 = { version = "23.12.*", source = "nvidia" }
+cuml-cu12 = { version = "23.12.*", source = "nvidia" }
+cugraph-cu12 = { version = "23.12.*", source = "nvidia" }
+cuspatial-cu12 = { version = "23.12.*", source = "nvidia" }
+cuproj-cu12 = { version = "23.12.*", source = "nvidia" }
+cuxfilter-cu12 = { version = "23.12.*", source = "nvidia" }
+cucim-cu12 = { version = "23.12.*", source = "nvidia" }
+pylibraft-cu12 = { version = "23.12.*", source = "nvidia" }
+raft-dask-cu12 = { version = "23.12.*", source = "nvidia" }
+rmm-cu12 = { version = "23.12.*", source = "nvidia" }
+ucx-py-cu12 = { version = "0.35.0", source = "nvidia" }
+pylibcugraph-cu12 = { version = "23.12.*", source = "nvidia" }
+
+[tool.poetry.group.notebook.dependencies]
+jupyter = "*"
+notebook = "*"
+
+[tool.poetry.group.lint.dependencies]
+pre-commit = "^2.20.0"
+
+[[tool.poetry.source]]
+name = "nvidia"
+url = "https://pypi.nvidia.com"
+priority = 'supplemental'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
